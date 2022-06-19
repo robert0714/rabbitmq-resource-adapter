@@ -8,9 +8,10 @@ import javax.jms.MessageListener;
 
 import org.jboss.ejb3.annotation.ResourceAdapter;
 
-@MessageDriven(activationConfig = {
+@MessageDriven(name = "rabbitMQMDB" ,
+     activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/eis/RabbitQueue") }, name = "ActiveMQMDB")
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/eis/RabbitQueue") } )
 @ResourceAdapter(value = "rabbitmq-rar-0.0.1-SNAPSHOT.rar")
 public class MyMDB implements MessageListener {
 

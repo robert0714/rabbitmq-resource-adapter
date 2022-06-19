@@ -27,11 +27,13 @@ import java.util.Map;
 
 import org.jboss.logging.Logger;
 
+import com.rabbitmq.client.BlockedCallback;
 import com.rabbitmq.client.BlockedListener;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ExceptionHandler;
 import com.rabbitmq.client.ShutdownListener;
 import com.rabbitmq.client.ShutdownSignalException;
+import com.rabbitmq.client.UnblockedCallback;
 
 /**
  * RabbitmqConnectionImpl
@@ -217,5 +219,27 @@ public class RabbitmqConnectionImpl implements RabbitmqConnection
   public void removeShutdownListener(ShutdownListener listener) {
     this.mc.getUnderlyingConnection().removeShutdownListener(listener);
   }
+
+
+	@Override
+	public BlockedListener addBlockedListener(BlockedCallback blockedCallback, UnblockedCallback unblockedCallback) { 
+		return mc.getUnderlyingConnection().addBlockedListener(blockedCallback, unblockedCallback);
+	}
+
+
+	@Override
+	public String getClientProvidedName() { 
+		return mc.getUnderlyingConnection().getClientProvidedName() ;
+	}
+
+	@Override
+	public String getId() { 
+		return mc.getUnderlyingConnection().getId();
+	}
+
+	@Override
+	public void setId(String id) {
+		mc.getUnderlyingConnection().setId(id);
+	}
 
 }

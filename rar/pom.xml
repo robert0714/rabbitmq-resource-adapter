@@ -5,13 +5,44 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wildfly.connector</groupId>
 	<artifactId>rabbitmq-rar</artifactId>
+	
 	<packaging>rar</packaging>
+	<name>RabbitMQ :: RAR</name>
+    <description>A JCA Resource Adapter used to integrate RabbitMQ with transactional enterprise containers</description>
+	
+	
 	<version>0.0.1-SNAPSHOT</version>
 	<url>http://repository.jboss.org</url>
 	<properties>
-		<version.org.jboss.ironjacamar>1.1.3.Final
-		</version.org.jboss.ironjacamar>
+		<version.org.jboss.ironjacamar>1.4.35.Final</version.org.jboss.ironjacamar>
 		<arquillian.version>1.1.1.Final</arquillian.version>
+		<version.jboss.bom>26.1.1.Final</version.jboss.bom>
+		<org.wildfly.as.version>${version.jboss.bom}</org.wildfly.as.version> 
+		<!-- JBoss dependency versions -->
+        <version.wildfly.maven.plugin>3.0.0.Final</version.wildfly.maven.plugin>
+
+		<jakartaee-api.version>8.0.0</jakartaee-api.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- other plugin versions -->
+        <version.compiler.plugin>3.8.1</version.compiler.plugin>
+        <version.surefire.plugin>2.22.2</version.surefire.plugin>
+        <version.failsafe.plugin>2.22.2</version.failsafe.plugin> 
+		<version.jar.plugin>3.2.0</version.jar.plugin>
+		<version.rar.plugin>2.4</version.rar.plugin>
+        <version.war.plugin>3.3.2</version.war.plugin>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir> 
+        
+        <testLogToFile>true</testLogToFile>
+		<maven.deploy.skip>true</maven.deploy.skip>
+		<ts.skipTests>${skipTests}</ts.skipTests>
+		<enforcer.skip>true</enforcer.skip> 
+		
+		<maven.repository.protocol>https</maven.repository.protocol>
+        <!-- The full remote maven repo URL; can be overridden via -D for special use cases -->
+        <maven.repository.url>${maven.repository.protocol}://repository.jboss.org/nexus/content/groups/public/</maven.repository.url>
 	</properties>
 
 	<dependencies>
@@ -24,152 +55,104 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>3.5.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-spec-api</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>provided</scope>
+			<version>5.14.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-arquillian-embedded</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+		  <groupId>com.rabbitmq.jms</groupId>
+		  <artifactId>rabbitmq-jms</artifactId>
+		  <version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-arquillian-embedded-byteman</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+		    <groupId>org.jboss.naming</groupId>
+		    <artifactId>jnpserver</artifactId>
+		    <version>5.0.5.Final</version>
+		    <scope>test</scope>
+		</dependency> 
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-common-api</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-spi</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-common-spi</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api-maven</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-common-impl</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-spi-maven</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-core-api</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-core-impl</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-depchain</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-deployers-common</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-deployers-fungal</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-embedded</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-test-eis</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.ironjacamar</groupId>
-			<artifactId>ironjacamar-validator</artifactId>
-			<version>${version.org.jboss.ironjacamar}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.logging</groupId>
-			<artifactId>jboss-logging-spi</artifactId>
-			<version>2.2.0.CR1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
+            <groupId>jakarta.platform</groupId> 
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jboss.ejb3</groupId>
 			<artifactId>jboss-ejb3-ext-api</artifactId>
-			<version>2.2.0.Final</version>
+			<version>2.3.0.Final</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
-		<dependencies>
+		<dependencies> 
 			<dependency>
-				<groupId>org.jboss.ironjacamar</groupId>
-				<artifactId>ironjacamar-depchain</artifactId>
-				<version>${version.org.jboss.ironjacamar}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>wildfly-jakartaee8-with-tools</artifactId>
+                <version>${version.jboss.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<plugins>
-
+			<testSourceDirectory>src/test/java</testSourceDirectory>
+		<plugins>	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>${version.compiler.plugin}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
-			</plugin>
-
+			</plugin>	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-rar-plugin</artifactId>
-				<version>2.4</version>
+				<version>${version.rar.plugin}</version>
 				<executions>
 					<execution>
 						<id>test</id>
@@ -182,21 +165,289 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-jar-maven-plugin</artifactId> 
+				<version>${version.wildfly.maven.plugin}</version>
+				<configuration>
+             <!--  <hostname>192.168.18.30</hostname> -->
+                    <hostname>localhost</hostname>
+                    <port>9990</port>
+                    <username>admin</username>
+                    <password>123456</password>
+            <!-- <jbossHome>C:/tools/wildfly-8.0.0.Final</jbossHome> -->
+				</configuration>				
+			</plugin>
 		</plugins>
 	</build>
-
-
-	<distributionManagement>
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>${maven.repository.url}</url>
+            <layout>default</layout>
+        </repository>       
 		<repository>
-			<id>deployment</id>
-			<name>Internal Releases</name>
-			<url>http://nexus.service.consul:8081/nexus/content/repositories/releases/</url>
+			<id>redhat-maven-ga-group</id>
+			<name>Redhat GA Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/ga/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
 		</repository>
-		<snapshotRepository>
-			<id>deployment</id>
-			<name>Internal Releases</name>
-			<url>http://nexus.service.consul:8081/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+		 <!-- Remove below repo after opensaml 4.2.0 is accessible from maven central repo-->
+        <repository>
+            <id>opensaml-repo</id>
+            <name>opensaml</name>
+            <url>https://build.shibboleth.net/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>		
+		<repository>
+			<id>redhat-all-public-repository-group</id>
+			<name>Redhat All Public Maven Repository Group</name>
+			<url>http://maven.repository.redhat.com/techpreview/all/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>redhat-early-public-repository-group</id>
+			<name>Redhat Early Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/nexus/content/groups/product-earlyaccess/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>${maven.repository.url}</url>
+        </pluginRepository>
+    </pluginRepositories>
+	<profiles>
+		<profile>
+			<id>basic.integration.tests.profile</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+            <dependencies>
+                <!-- keypoint to Test temp wilfly  -->
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <scope>test</scope>
+                </dependency> 
+            </dependencies>
+  
+			<!-- Server configuration executions. -->
+			<build>			    
+				<testResources>
+					<testResource>
+						<directory>src/test/java</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</testResource>
+				</testResources>                
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.wildfly</groupId>
+											<artifactId>wildfly-dist</artifactId>
+											<version>${org.wildfly.as.version}</version>
+											<type>zip</type>
+											<overWrite>false</overWrite>
+											<outputDirectory>target</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- Sets general surefire system properties. These can be overridden 
+						by inheriting plugin configurations. -->
+
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${version.surefire.plugin}</version>
+						<configuration>
+							<skipTests>${ts.skipTests}</skipTests>
+							<enableAssertions>true</enableAssertions>
+							<!-- System properties to forked surefire JVM which runs clients. -->
+							<failIfNoTests>false</failIfNoTests>
+							<redirectTestOutputToFile>${testLogToFile}</redirectTestOutputToFile>
+							<systemPropertyVariables>
+								<jboss.home>${basedir}/target/wildfly-${org.wildfly.as.version}</jboss.home>
+							</systemPropertyVariables>
+						</configuration>
+						<executions>
+
+							<!-- Disable default-test execution. -->
+							<execution>
+								<id>default-test</id>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>basic-integration-default-full.surefire</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<!-- Tests to execute. Overriden in webProfileExclusion.profile 
+										. -->
+									<includes>
+										<include>com/actionbazaar/buslogic/*Test.java</include>
+									</includes>
+
+									<!-- Parameters to test cases. -->
+									<systemPropertyVariables
+										combine.children="append">
+										<jboss.server.config.file.name>standalone-full.xml</jboss.server.config.file.name>
+										<jboss.options>-Dee8.preview.mode=true</jboss.options>
+									</systemPropertyVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin> 
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- An optional Arquillian testing profile that executes tests in your 
+				WildFly / JBoss EAP instance. This profile will start a new WildFly / JBoss 
+				EAP instance, and execute the test, shutting it down when done. Run with: 
+				mvn clean verify -Parq-managed -->
+			<id>arq-managed</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${version.failsafe.plugin}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Configuration for Arquillian: -->
+                            <systemPropertyVariables>
+                                <!-- Defines the container qualifier in "arquillian.xml" -->
+                                <arquillian.launch>widlfly-managed</arquillian.launch>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- An optional Arquillian testing profile that executes tests in a remote JBoss EAP instance.
+                 Run with: mvn clean verify -Parq-remote -->
+            <id>arq-remote</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${version.failsafe.plugin}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Configuration for Arquillian: -->
+                            <systemPropertyVariables>
+                                <!-- Defines the container qualifier in "arquillian.xml" -->
+                                <arquillian.launch>widlfly-remote</arquillian.launch>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
 </project>

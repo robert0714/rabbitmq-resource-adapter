@@ -21,15 +21,27 @@
  */
 package org.wildfly.connector.rabbitmq;
 
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Logger.getLogger;
+import static javax.ws.rs.client.ClientBuilder.newClient;
+import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
+import static org.jboss.shrinkwrap.api.asset.EmptyAsset.INSTANCE;
+import static org.junit.Assert.assertEquals;
+import static org.jboss.shrinkwrap.resolver.api.maven.Maven.resolver;
+import static java.lang.Thread.sleep;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
+import javax.naming.InitialContext;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -55,6 +67,9 @@ public class ConnectorTestCase {
 			.getName());
 
 	private static String deploymentName = "ConnectorTestCase";
+	
+	@ArquillianResource
+	private InitialContext iniCtx;
 
 	/**
 	 * Define the deployment
@@ -65,14 +80,18 @@ public class ConnectorTestCase {
 	public static ResourceAdapterArchive createDeployment() {
 		ResourceAdapterArchive raa = ShrinkWrap.create(
 				ResourceAdapterArchive.class, deploymentName + ".rar");
-		JavaArchive ja = ShrinkWrap.create(JavaArchive.class, UUID.randomUUID()
+		
+		JavaArchive jar = ShrinkWrap.create(JavaArchive.class, UUID.randomUUID()
 				.toString() + ".jar");
-		ja.addPackages(true,
-				Package.getPackage("org.wildfly.connector.rabbitmq"));
-		raa.addAsLibrary(ja);
-
+		jar.addPackages(true,Package.getPackage("org.wildfly.connector.rabbitmq"));
+		
+		File[] files = resolver().loadPomFromFile("pom.xml").importRuntimeDependencies()
+ 				.resolve("org.wildfly.connector:rabbitmq-api:0.0.1-SNAPSHOT").withTransitivity().asFile();
+		raa.addAsLibrary(jar);
+		raa.addAsLibraries(files); 
+		
 		raa.addAsManifestResource("ironjacamar-test.xml", "ironjacamar.xml");
-		System.out.println(raa.toString(true));
+		System.out.println(raa.toString(true)); 
 		return raa;
 	}
 
@@ -96,7 +115,17 @@ public class ConnectorTestCase {
 	@Resource(mappedName = "java:/eis/RabbitQueue")
 	private javax.jms.Queue queue;
 	
-
+//	@Test
+//	public void testWithDefaultInterceptor() throws NamingException {
+//		final String hello = "Hello World";
+//		final SimpleHome home = (SimpleHome) iniCtx.lookup("java:module/SimpleStateless!" + SimpleHome.class.getName());
+//		final SimpleInterface ejbInstance = home.createSimple();
+//		logger.info("executed jndi call");
+//		ejbInstance.setText(hello);
+//		assertEquals(SimpleStatelessBean.executed, false);
+//		assertEquals(hello, ejbInstance.getText());
+//		assertEquals(SimpleStatelessBean.executed, true);
+//	}
 	@Test
 	public void testConnectionFactory() throws Exception {
 		Assert.assertNotNull(connectionFactory1);

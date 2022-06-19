@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.wings4cloud</groupId>
+	<artifactId>parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Wildfly Book</name>
+	<description>rabbitmq-resource-adapter</description> 
+	<developers>
+		<developer>
+			<id>robert0714</id>
+			<name>Robert lee</name>
+		</developer>
+	</developers>
+
+	<properties> 
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+		<javaee.version>8.0</javaee.version>
+		<awaitility-proxy.version>3.1.6</awaitility-proxy.version>
+		<awaitility.version>4.1.1</awaitility.version>
+ 
+		<maven.surefire.plugin.version>2.22.0</maven.surefire.plugin.version>
+		<maven.ejb.plugin.version>3.2.1</maven.ejb.plugin.version>
+		<replacer.plugin.version>1.5.3</replacer.plugin.version>
+		<testLogToFile>true</testLogToFile>
+		<maven.deploy.skip>true</maven.deploy.skip>
+		<ts.skipTests>${skipTests}</ts.skipTests>
+		<enforcer.skip>true</enforcer.skip>
+		<jakartaee-api.version>8.0.0</jakartaee-api.version> 
+		<version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
+		 <!-- Protocol to use for communication with remote maven repositories.
+             You can set to 'http' if you are using a maven proxy and 'https'
+             interferes with that. Use 'https' for builds that will be released
+             to non-snapshot public maven repos -->
+        <maven.repository.protocol>https</maven.repository.protocol>
+        <!-- The full remote maven repo URL; can be overridden via -D for special use cases -->
+        <maven.repository.url>${maven.repository.protocol}://repository.jboss.org/nexus/content/groups/public/</maven.repository.url>
+	</properties>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>${maven.repository.url}</url>
+            <layout>default</layout>
+        </repository>       
+		<repository>
+			<id>redhat-maven-ga-group</id>
+			<name>Redhat GA Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/ga/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		 <!-- Remove below repo after opensaml 4.2.0 is accessible from maven central repo-->
+        <repository>
+            <id>opensaml-repo</id>
+            <name>opensaml</name>
+            <url>https://build.shibboleth.net/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>		
+		<repository>
+			<id>redhat-all-public-repository-group</id>
+			<name>Redhat All Public Maven Repository Group</name>
+			<url>http://maven.repository.redhat.com/techpreview/all/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>redhat-early-public-repository-group</id>
+			<name>Redhat Early Public Maven Repository Group</name>
+			<url>https://maven.repository.redhat.com/nexus/content/groups/product-earlyaccess/
+            </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>${maven.repository.url}</url>
+        </pluginRepository>
+    </pluginRepositories>
+	<modules>
+		<module>api</module>
+		<module>rar</module>
+		<module>test</module> 
+	</modules>
+</project>
